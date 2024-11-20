@@ -1,61 +1,54 @@
 {% set name = "netgen" %}
-{% set version = "6.2.1808" %}
-{% set sha256 = "20501a2f51beeb73a27f8b9ad57af7e452d38b36334b244c3de66b171b2f29a2" %}
+{% set version = "6.2.2405" %}
+{% set sha256 = "b554b6f7eb36feac7d6f5ee33cd520403709af579ab982f07e31a2c579d93a66" %}
 
 
 package:
-    name: {{ name }}
-    version: {{ version }}
+  name: {{ name }}
+  version: {{ version }}
 
 source:
-    fn: netgen_v{{ version }}.tar.gz
-    url: https://github.com/NGSolve/netgen/archive/v{{ version }}.tar.gz
-    sha256: {{ sha256 }}
-    patches:
-        - 001_no_gui_and_no_dynamic_python_linking.patch
-        - 002_do_not_set_c++_standart_explicitly.patch
+  url: https://github.com/NGSolve/netgen/archive/v{{ version }}.tar.gz
+  sha256: 6d491336ab91cf3a0e416e75bbd17e604303c2aef1d448cea18f8388b719dc42
 
 build:
-    number: 1005
-    skip: True  # [py27]
+  number: 0
 
 requirements:
-    build:
-        - {{ compiler('cxx') }}
-        - ninja
-        - cmake
-    host:
-        - occt
-        - python
-        - pybind11
-        - zlib
-    run:
-        - occt
-        - python
-        - zlib
+  build:
+    - {{ compiler('cxx') }}
+    - {{ stdlib("c") }}
+    - python                                 # [build_platform != target_platform]
+    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+    - ninja
+    - cmake
+  host:
+    - libgl-devel                            # [linux]
+    - pybind11
+    - pybind11-stubgen                       # [build_platform != target_platform]
+    - libgl-devel                            # [linux]
+    - occt
+    - python
+    - zlib
+  run:
+    - python
 
 test:
-    commands:
-        - otool -L "${PREFIX}/lib/python3.7/site-packages/netgen/libngpy.so"  # [osx and py==37]
-        - ldd "${PREFIX}/lib/python3.7/site-packages/netgen/libngpy.so"  # [linux and py==37]
-        - otool -L "${PREFIX}/lib/python3.6/site-packages/netgen/libngpy.so"  # [osx and py==36]
-        - ldd "${PREFIX}/lib/python3.6/site-packages/netgen/libngpy.so"  # [linux and py==36]
-        - python -c "import sys; print(sys.version); import netgen;"
+  imports:
+    - netgen
+    - pyngcore
 
 about:
-    home: https://sourceforge.net/projects/netgen-mesher/
-    license: LGPL2.1
-    license_family: LGPL
-    license_file: LICENSE
-    summary: this is netgen
-    description: NETGEN is an automatic 3d tetrahedral mesh generator.
-                 It accepts input from constructive solid geometry (CSG) or boundary representation (BRep) from
-                 STL file format. The connection to a geometry kernel allows the handling of IGES and STEP files.
-                 NETGEN contains modules for mesh optimization and hierarchical mesh refinement.
-                 Netgen is open source based on the LGPL license. It is available for Unix/Linux and Windows.
-    doc_url: http://www.hpfem.jku.at/netgen/
-    dev_url: https://sourceforge.net/projects/netgen-mesher/
+  home: https://sourceforge.net/projects/netgen-mesher/
+  license: LGPL-2.1-or-later
+  license_family: LGPL
+  license_file: LICENSE
+  summary: this is netgen
+  description: NETGEN is an automatic 3d tetrahedral mesh generator. It accepts input from constructive solid geometry (CSG) or boundary representation (BRep) from STL file format. The connection to a geometry kernel allows the handling of IGES and STEP files. NETGEN contains modules for mesh optimization and hierarchical
+    mesh refinement. Netgen is open source based on the LGPL license. It is available for Unix/Linux and Windows.
+  doc_url: http://www.hpfem.jku.at/netgen/
+  dev_url: https://sourceforge.net/projects/netgen-mesher/
 
 extra:
-    recipe-maintainers:
-        - looooo
+  recipe-maintainers:
+    - looooo
