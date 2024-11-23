@@ -37,9 +37,8 @@ test:
   requires:
     - lldb
   commands:
-    - lldb -b -o r -o bt python -- -c'import netgen'
-    - lldb -b -o r -o bt python -- -c'import pyngcore'
-
+    - lldb -b -o 'settings set target.disable-aslr false' -o r -o bt python -- -c '\'import netgen\''
+    - lldb -b -o 'settings set target.disable-aslr false' -o r -o bt python -- -c '\'import pyngcore\''
 
 about:
   home: https://sourceforge.net/projects/netgen-mesher/
