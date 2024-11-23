@@ -34,9 +34,14 @@ requirements:
     - python
 
 test:
+  requires:
+    - lldb                                   # [osx]
+  commands:
+    - lldb -b -o r -o bt python -- -c'import netgen' # [osx]
   imports:
     - netgen
     - pyngcore
+
 
 about:
   home: https://sourceforge.net/projects/netgen-mesher/
