@@ -35,12 +35,10 @@ requirements:
 
 test:
   requires:
-    - lldb                                   # [osx]
+    - lldb
   commands:
-    - lldb -b -o r -o bt python -- -c'import netgen' # [osx]
-  imports:
-    - netgen
-    - pyngcore
+    - lldb -b -o r -o bt python -- -c'import netgen'
+    - lldb -b -o r -o bt python -- -c'import pyngcore'
 
 
 about:
